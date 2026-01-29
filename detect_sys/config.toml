@@ -1,0 +1,33 @@
+# config.toml
+
+[io]
+encoding   = "cp932"      # shift-jis 系装置ならこれ推奨
+header_row = 2            # CSVの3行目がヘッダなら 2
+
+[paths]
+# ★基準フォルダ（ここ以下を全探索）
+# base_dir = "\\\\192.168.89.21\\mailib\\EXV_ASSY_D_Tyubukumitsukeki_M\\INPUT_M\\bak"
+base_dir = "data"
+
+# CSVは再帰で全て拾う
+glob_csv   = "*.csv"
+
+# 既存システムの保持ファイル
+prev_path  = "table/d_tube_assembly.csv"
+cross_xlsx = "table/d_tube_assembly.xlsx"
+out_events = "output/output.csv"      # state（未ペアXのみ）
+out_prev   = "table/d_tube_assembly.csv"
+output_dir = "output"
+state_path = "state.json"
+
+[logic]
+debounce_n       = 1          # チャタ対策。1 でOFF、3以上でON
+duration_min_ms  = 0
+duration_max_ms  = 0
+
+# 書き込み中ファイルガード
+write_guard_enable  = false
+write_guard_wait_ms = 300
+
+# 最近 N 日以内だけ処理（0 = 全部）
+recent_days = 0
