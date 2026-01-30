@@ -227,9 +227,12 @@ usecols = ['TIME'] + signals
 dtype_map = {sig:'Int8' for sig in signals} #Create a dtype map to read all signal columns as Int8.
 
 processd_ok = []
+total_file = len(pending_files)
 
-for f_abs, f_rel in zip(pending_files, pending_rel):
+for i, (f_abs, f_rel) in enumerate(zip(pending_files, pending_rel), start=1):
 
+    print (f'[{i}/{total_file}] Processing: {f_rel}')
+    
     if WRITE_GUARD:
         if not stable(f_abs, WRITE_WAIT):
             continue
