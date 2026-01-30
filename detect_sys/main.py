@@ -75,7 +75,7 @@ def load_state(path):
 
 '''
     Save the state to a JSON file.
-    ensure_ascii=False : Don't convert non-ASCII characters to \uXXXX.
+    ensure_ascii=False : Don't convert non-ASCII characters to \\uXXXX.
 '''
 def save_state(path, state):
     with open(path, 'w', encoding='utf-8') as w:
@@ -232,7 +232,7 @@ total_file = len(pending_files)
 for i, (f_abs, f_rel) in enumerate(zip(pending_files, pending_rel), start=1):
 
     print (f'[{i}/{total_file}] Processing: {f_rel}')
-    
+
     if WRITE_GUARD:
         if not stable(f_abs, WRITE_WAIT):
             continue
@@ -340,7 +340,7 @@ for i, (f_abs, f_rel) in enumerate(zip(pending_files, pending_rel), start=1):
     processd_ok.append(f_rel)
 
 ## Write on CSV files each Name
-for name, rows in pairs_buf.item():
+for name, rows in pairs_buf.items():
     if not rows:
         continue
     fname = os.path.join(OUTPUT_DIR, f'{sanitize(name)}.csv')
