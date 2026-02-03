@@ -1,16 +1,13 @@
 ## Standarrd library
-from pathlib import Path                            # For filesystem path and operations.
-import pandas as pd                                 # For data analysis.
-import numpy as np                                  #
-import sys                                          #
-import logging                                      #
-from logging.handlers import RotatingFileHandler    #
-import os                                           # For OS-dependent features.
-import re                                           # For regular expression.
-import json                                         # For working with JSON.
-import tomllib                                      # For working with TOML.
-from datetime import datetime, timedelta            # For the current date/time and time differences.
-from collections import defaultdict                 # For automatically initializing missing dictionary keys.
+from pathlib import Path                    # For filesystem path and operations.
+import pandas as pd                         # For data analysis.
+import numpy as np                          
+import os                                   # For OS-dependent features.
+import re                                   # For regular expression.
+import json                                 # For working with JSON.
+import tomllib                              # For working with TOML.
+from datetime import datetime, timedelta    # For the current date/time and time differences.
+from collections import defaultdict         # For automatically initializing missing dictionary keys.
 
 ## Read Setting(TOML)
 '''
@@ -18,59 +15,39 @@ from collections import defaultdict                 # For automatically initiali
     # Otherwise, load TOML file.
 '''
 def load_toml(path):
-    try:
-        if tomllib is None or not os.path.exists(path):
-            return {}
-        with open(path, 'rb') as f:
-            return tomllib.load(f)
-    except Exception:
+    if tomllib is None or not os.path.exists(path):
         return {}
+    with open(path, 'rb') as f:
+        return tomllib.load(f)
     
 '''
-    IF cfg is not a dictonary or any key is missing, return default.
-    Otherwise, return the value for the given key path.
+    #IF cfg is not a dictonary or any key is missing, return default.
+    #Otherwise, return the value for the given key path.
 '''
-def cfg(dic: dict, keys, default=None):
-    cur = dic
+def cfg(cfg, keys, default=None):
+    cur = cfg
     for k in keys:
         if not isinstance(cur, dict) or k not in cur:
             return default
         cur = cur[k]
     return cur
 
-'''
-    Return the application's base directory.
-    Convert a path to an aboslute path using a base directory.
-'''
-def app_base_dir() -> Path:
-    if getattr(sys, 'frozen', False):
-        return Path(sys.executable).parent
-    return Path(__file__).resolve().parent
-
-def as_abs(p, base: Path ) -> Path | None:
-    if p is None or str(p).strip() == '':
-        return None
-    p = Path(p)
-    return p if p.is_absolute() else base / p
-
-## Decide base_dir
-RUN_BASE = app_base_dir() 
-READ_BASE = app_base_dir()
-
 ## Get Config
-CFG_PATH = READ_BASE / 'config.toml'
-CFG = load_toml(CFG_PATH)
+# workdirectory is based on script path
+os.chdir(Path(__file__).resolve().parent)
+
+CFG = load_toml('config.toml')
 
 ENC         = cfg(CFG, ('io', 'encoding'), 'CP932')                             #Encoding
 HDRROW      = cfg(CFG, ('io', 'header_row'), 2)                                 #Header_row_count
 
-CSV_GLOB    = cfg(CFG, ('paths', 'glob_csv'), '*.csv')                                              #Target_files
-BASE_DIR    = as_abs(cfg(CFG, ('paths', 'base_dir'), 'data'), READ_BASE)                            #Original_Data_directory
-PREV_PATH   = as_abs(cfg(CFG, ('paths', 'prev_path'), 'table/d_tube_assembly.csv'),RUN_BASE)        #Previous_Data_file
-CROSS_XLSX  = as_abs(cfg(CFG, ('paths', 'cross_xlsx'), 'table/d_tube_assembly.xlsx'), READ_BASE)    #Cross_Table_file
-OUT_EVENTS  = as_abs(cfg(CFG, ('paths', 'out_events'), 'output/output.csv'), RUN_BASE)              #Unmatch_file
-OUTPUT_DIR  = as_abs(cfg(CFG, ('paths', 'output_dir'), 'output'), RUN_BASE)                         #Ouput_directory
-STATE_PATH  = as_abs(cfg(CFG, ('paths', 'state_path'), 'state.json'), RUN_BASE)                     #Already_processed_file
+BASE_DIR    = cfg(CFG, ('paths', 'base_dir'))                                   #Original_Data_directory
+CSV_GLOB    = cfg(CFG, ('paths', 'glob_csv'), '*.csv')                          #Target_files
+PREV_PATH   = cfg(CFG, ('paths', 'prev_path'), 'table/d_tube_assembly.csv')     #Previous_Data_file
+CROSS_XLSX  = cfg(CFG, ('paths', 'cross_xlsx'))                                 #Cross_Table_file
+OUT_EVENTS  = cfg(CFG, ('paths', 'out_events'))                                 #Unmatch_file
+OUTPUT_DIR  = cfg(CFG, ('paths', 'output_dir'))                                 #Ouput_directory
+STATE_PATH  = cfg(CFG, ('paths', 'state_path'), 'state.json')                   #Already_processed_file
 
 DEBOUNCE_N  = int(cfg(CFG, ('logic', 'debounce_n'), 1))                         #Switch_debouncing(1:OFF, 3>=:ON)
 DUR_MIN     = int(cfg(CFG, ('logic', 'duration_min_ms'), 0))                    #Duration_minimum_seconds(0:OFF)
@@ -80,58 +57,8 @@ WRITE_WAIT  = int(cfg(CFG, ('logic', 'write_guard_wait_ms'), 300))              
 RECENT_DAYS = int(cfg(CFG, ('logic', 'recent_days'), 0))                        #Last_N_days(0:all)
 
 ## Make dirctory
-if OUTPUT_DIR is None:
-    OUTPUT_DIR = RUN_BASE / 'output'
-if PREV_PATH is None:
-    PREV_PATH = RUN_BASE / 'table' / 'd_tube_assembly.csv'
-
-OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-PREV_PATH.parent.mkdir(parents=True, exist_ok=True)
-
-## Log Setting
-def setup_logging(log_dir:Path | None = None, level = logging.INFO) -> None:
-    '''
-        Configure application-wide logging.
-        Sets up INFO/DEBUG logs to stdout, WARNING+ logs to stderr, and optional
-        rotating file logs in `log_dir`, replacing any existing handlers.
-    '''
-    logger = logging.getLogger()
-    logger.setLevel(level)
-
-    # Delete exist handler
-    for h in list(logger.handlers):
-        logger.removeHandler(h)
-    
-    fmt = logging.Formatter('%(asctime)s [%(levelname)s] %(message)s')
-
-    # stdout(INFO/DEBUG)
-    h_out = logging.StreamHandler(sys.stdout)
-    h_out.setLevel(logging.DEBUG)
-    h_out.addFilter(lambda r: r.levelno <= logging.INFO)
-    h_out.setFormatter(fmt)
-    logger.addHandler(h_out)
-
-    # stderr(More WARNING)
-    h_err = logging.StreamHandler(sys.stderr)
-    h_err.setLevel(logging.WARNING)
-    h_err.setFormatter(fmt)
-    logger.addHandler(h_err)
-
-    # general setting
-    if log_dir is not None:
-        log_dir.mkdir(parents=True, exist_ok=True)
-        f = RotatingFileHandler(
-            log_dir / 'app.log',
-            maxBytes = 2_000_000,
-            backupCount = 3,
-            encoding='utf-8'
-        )
-        f.setLevel(logging.DEBUG)
-        f.setFormatter(fmt)
-        logger.addHandler(f)
-
-setup_logging(RUN_BASE / 'logs', level=logging.INFO)
-logging.info(f'Application start Ver:1.0.1')
+os.makedirs(OUTPUT_DIR, exist_ok=True)
+os.makedirs(Path(PREV_PATH).parent, exist_ok=True)
 
 ## utils
 '''
@@ -200,12 +127,10 @@ else:
     Create from CROSS_XLSX a list of name associated with each x and eaxh y.
     Collect all x and y values that appear, removing duplicates.
 '''
-cross = pd.read_excel(CROSS_XLSX, engine='openpyxl')
+cross = pd.read_excel(CROSS_XLSX)
 for col in ['name', 'x', 'y']:
     if col not in cross.columns:
-        msg = 'CROSS_XLSX does not contain the columns [name], [x] and [y]'
-        logging.error(msg)
-        raise ValueError(msg)
+        raise ValueError('CROSS_XLSX does not contain the columns [name], [x] and [y]')
 
 x_map = defaultdict(list) #A dictionary that automatically initializes missing keys with an empty list.
 y_map = defaultdict(list) 
@@ -230,9 +155,7 @@ already = set(state['processed_paths']) #Creates a set of unique file path strin
 ## explored
 base = Path(BASE_DIR)
 if not base.exists():
-    msg = f'Not exist base folder:{base}'
-    logging.error(msg)
-    raise FileNotFoundError(msg)
+    raise FileNotFoundError(f'Not exist base folder:{base}')
 
 files_all = list(base.rglob(CSV_GLOB))
 
@@ -264,7 +187,7 @@ if RECENT_DAYS > 0:
 # Select only unprocessed data
 pending_rel = [r for r in files_rel if r not in already]
 if not pending_rel:
-    logging.info("not New files, Exit.")
+    print("not New files, Exit.")
     raise SystemExit(0)
 
 # Return the absolute path
@@ -309,7 +232,7 @@ total_file = len(pending_files)
 
 for i, (f_abs, f_rel) in enumerate(zip(pending_files, pending_rel), start=1):
 
-    #print (f'[{i}/{total_file}] Processing: {f_rel}')
+    print (f'[{i}/{total_file}] Processing: {f_rel}')
 
     if WRITE_GUARD:
         if not stable(f_abs, WRITE_WAIT):
@@ -445,6 +368,3 @@ else:
 ## Update state.json
 state['processed_paths'] = sorted(set(already).union(processd_ok))
 save_state(STATE_PATH, state)
-
-logging.info(f'totalfile:{total_file}')
-logging.info(f'Application end')

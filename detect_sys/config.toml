@@ -16,7 +16,6 @@ glob_csv   = "*.csv"
 prev_path  = "table/d_tube_assembly.csv"
 cross_xlsx = "table/d_tube_assembly.xlsx"
 out_events = "output/output.csv"      # state（未ペアXのみ）
-out_prev   = "table/d_tube_assembly.csv"
 output_dir = "output"
 state_path = "state.json"
 
