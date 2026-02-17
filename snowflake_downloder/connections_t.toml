@@ -1,8 +1,0 @@
-[snowflake]
-user='SA171_SYSTEMUSER'
-password='wv3oqkQ@'
-account='ip16082.ap-northeast-1.aws'
-role='SA_SA171_ROLE'
-warehouse='WH_SA171'
-scheme='SA171_TSM3_DL'
-database='SELFANALYSIS_DB'

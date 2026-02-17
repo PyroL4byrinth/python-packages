@@ -1,0 +1,3 @@
+2026-02-17 14:04:36,879 INFO Snowflake Connector for Python Version: 4.1.0, Python Version: 3.11.4, Platform: Windows-10-10.0.22631-SP0
+2026-02-17 14:04:36,879 INFO Connecting to GLOBAL Snowflake domain
+2026-02-17 14:04:36,879 ERROR Failed to connect to Snowflake
