@@ -9,3 +9,9 @@ git pull --rebase
 git add .
 git commit -m "version x.x.x yyyymmdd"
 git push origin main
+
+変更の破棄
+git reset --hard
+
+リポジトリの変更
+git remote set-url origin https://github.com/ユーザー名/新しいリポジトリ名.git
