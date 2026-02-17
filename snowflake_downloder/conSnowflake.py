@@ -109,7 +109,7 @@ for sql_file in sql_all_files:
 
         #　CSVファイルに保存(outputフォルダに保存)
         save_path = sql_file.split('\\')[-1].replace('.sql','.csv')
-        csv_file = f"output/{datetime.today().strftime('%Y%m%d')}_{save_path}"
+        csv_file = f"output/{save_path}"
         df.to_csv(csv_file, index=False, encoding='utf-8')
 
         logger.info("[SUCCESS] %s → %s",sql_file, csv_file)
