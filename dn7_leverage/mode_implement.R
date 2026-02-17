@@ -1,0 +1,96 @@
+#############################################################
+#
+# モデル検証用プログラム
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#############################################################
+
+## ワークスペース初期化
+rm(list = ls()) # 現環境のオブジェクトをすべて解放（削除）する
+# gc():garbage collection:未使用のメモリを回収
+gc(); gc()
+
+## パッケージ読み込み & インストール
+Force <- FALSE
+pkgs <- c("dplyr", "data.table", "ggplot2", "plotly","caret")
+for (pkg in pkgs){
+  # 読み込みに失敗したらインストールしてから再読み込み
+  # require()：パッケージの読み込み時、失敗した場合FLASEを返して続行する関数
+  # library()：パッケージの読み込み時、失敗した場合エラーで停止する関数
+  # character.only = TURE:パッケージ名を文字列で渡す（デフォルトは、シンボル）
+  if(Force || !require(pkg, character.only = TRUE)){
+    install.packages(pkg)
+    library(pkg, character.only = TRUE)
+  }
+}
+
+## 自作関数の読み出し
+funcs <- c("func_fit_model.R", "func_predict_model.R")
+for (func in funcs){
+  source(func)
+}
+
+## データソース変数
+DATA_SOURCES <- "C:/GitHub/data-stored/lin2.csv"
+CATEGORY_DATA <- "./output/category_lin2.csv"
+PROCESS_NUMBER <- "./source/ProcessNumber.csv"
+
+## 説明変数(X)と目的変数(Y)
+X_NAME <- "sum_equip_item_name - 部品組付_測定値|締付トルク - value"
+Y_NAME <- "sum_equip_item_name - 熱かしめ_測定値|コイル熱かしめ温度1 - value"
+x <- 1.881
+
+## CSV読み込み
+df <- read.csv(DATA_SOURCES, header = TRUE, check.names = FALSE)
+df_xy <- df[c(X_NAME, Y_NAME)]
+
+## CategoryData読み込み
+df_cat <- read.csv(CATEGORY_DATA, header = TRUE, check.names = FALSE, fileEncoding = "CP932")
+X_CATEGORY = df_cat$type[df_cat$fullname == X_NAME]
+Y_CATEGORY = df_cat$type[df_cat$fullname == Y_NAME]
+XY_CATEGORY = paste0(X_CATEGORY, "_", Y_CATEGORY)
+
+## 学習
+m <- fit_condfreq(
+  df_xy[[X_NAME]],
+  df_xy[[Y_NAME]]
+)
+
+## 予測（X複数、Y複数もOK） 
+res <- switch(XY_CATEGORY,
+  "低濃度値_低濃度値" = predict_condfreq(m, x, type = "prob"),
+  "低濃度_中濃度（整数）" = "",
+  "低濃度_中濃度（実数）" = "",
+  "低濃度_高濃度（数値）" = "",
+  "中濃度（整数）_低濃度" = "",
+  "中濃度（整数）_中濃度（整数）" = "",
+  "中濃度（整数）_中濃度（実数）" = "",
+  "中濃度（整数）_高濃度（数値）" = "",
+  "中濃度（実数）_低濃度" = "",
+  "中濃度（実数）_中濃度（整数）" = "",
+  "中濃度（実数）_中濃度（実数）" = "",
+  "中濃度（実数）_高濃度（数値）" = "",
+  "高濃度（数値）_低濃度" = "",
+  "高濃度（数値）_中濃度（整数）" = "",
+  "高濃度（数値）_中濃度（実数）" = "",
+  "高濃度（数値）_高濃度（数値）" = ""
+)
+
+# グラフ化
+p <- ggplot(res, aes(x = res$y, y = res$p)) +
+      geom_point() +
+      geom_line()
+
+ggplotly(p)
+
