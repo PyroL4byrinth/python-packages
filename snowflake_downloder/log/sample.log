@@ -1,0 +1,7 @@
+2025-10-31 11:12:06,825 INFO Snowflake Connector for Python Version: 3.17.4, Python Version: 3.11.4, Platform: Windows-10-10.0.22631-SP0
+2025-10-31 11:12:06,825 INFO Connecting to GLOBAL Snowflake domain
+2025-10-31 11:12:24,445 INFO [SUCCESS] sql\AIR.sql → output/AIR.csv
+2025-10-31 11:12:25,024 INFO [SUCCESS] sql\SEA.sql → output/SEA.csv
+2025-10-31 11:12:25,620 INFO [SUCCESS] sql\test.sql → output/test.csv
+2025-10-31 11:12:34,921 INFO [SUCCESS] sql\YUSYUTUHIN.sql → output/YUSYUTUHIN.csv
+2025-10-31 11:12:36,409 INFO 全処理終了

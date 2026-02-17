@@ -1,0 +1,8 @@
+[snowflake]
+user='SAxxx_SYSTEMUSER'
+account='ip16082.ap-northeast-1.aws'
+role='SA_SAxxx_ROLE'
+warehouse='WH_SAxxx'
+scheme='SAMPLE_SHEME_NAME'
+private_key_file='C:\...\rsa_key.p8'
+private_key_file_pwd='********************'
