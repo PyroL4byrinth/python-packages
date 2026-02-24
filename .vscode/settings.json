@@ -1,0 +1,4 @@
+{
+    "r.lsp.promptToInstall": false,
+    "sarif-viewer.connectToGithubCodeScanning": "off"
+}
