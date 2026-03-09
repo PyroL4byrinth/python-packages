@@ -1,0 +1,21 @@
+2026-03-09 16:10:48,495 INFO Snowflake Connector for Python Version: 4.1.0, Python Version: 3.11.4, Platform: Windows-10-10.0.22631-SP0
+2026-03-09 16:10:48,495 INFO Connecting to GLOBAL Snowflake domain
+2026-03-09 16:10:48,495 WARNING Dependency 'keyring' is not installed, cannot cache id token. You might experience multiple authentication pop ups while using ExternalBrowser/OAuth/MFA Authenticator. To avoid this please install keyring module using the following command:
+ pip install snowflake-connector-python[secure-local-storage]
+2026-03-09 16:11:14,902 WARNING Dependency 'keyring' is not installed, cannot cache id token. You might experience multiple authentication pop ups while using ExternalBrowser/OAuth/MFA Authenticator. To avoid this please install keyring module using the following command:
+ pip install snowflake-connector-python[secure-local-storage]
+2026-03-09 16:11:14,907 INFO Snowpark Session information: 
+"version" : 1.47.0,
+"python.version" : 3.11.4,
+"python.connector.version" : 4.1.0,
+"python.connector.session.id" : 14662058273470,
+"os.name" : Windows
+
+2026-03-09 16:11:24,615 INFO [SUCCESS] sql\GPM_MAK_MST.sql → output/GPM_MAK_MST.csv
+2026-03-09 16:11:24,926 ERROR [FAILED] sql\ODICS.sql: (1304): 01c2e84f-0003-713a-000d-55019d0da1a3: 002003 (02000): 01c2e84f-0003-713a-000d-55019d0da1a3: SQL compilation error:
+Schema 'SELFANALYSIS_DB.SA220_TS3_DL' does not exist or not authorized.
+2026-03-09 16:11:24,926 INFO Closing session: 14662058273470
+2026-03-09 16:11:24,926 INFO Canceling all running queries
+2026-03-09 16:11:25,508 INFO Closed session: 14662058273470
+2026-03-09 16:11:25,508 INFO 全処理終了
+2026-03-09 16:11:25,509 INFO Closed session: 14662058273470

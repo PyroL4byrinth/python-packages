@@ -32,7 +32,7 @@ logger = logging.getLogger(__name__)
 #TOMLファイルから接続情報を読み込む
 try:
     #　テスト用
-    # config = toml.load('./old/connections.toml')
+    # config = toml.load('gpm.toml')
     # 本番用
     config = toml.load('connections.toml')
     
@@ -61,6 +61,7 @@ try:
     )
 except Exception as e:
     logger.error("Failed to connect to Snowflake")
+    logger.error(e)
     sys.exit(1)
 
 # カーソルの作成

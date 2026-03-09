@@ -1,0 +1,8 @@
+[snowflake]
+user='hikaru.kitagawa.j2u@jp.denso.com'
+account='ip16082.ap-northeast-1.aws'
+role='HIKARU_KITAGAWA_J2U_JP_DENSO_COM_ROLE'
+warehouse='WH_COMMON_GP'
+scheme='GP_GPM_LOW'
+private_key_file='C:\...\rsa_key.p8'
+private_key_file_pwd='********************'
