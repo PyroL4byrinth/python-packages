@@ -1,0 +1,6 @@
+﻿-- 購入依頼済未発注
+SELECT  
+    * 
+FROM  
+    SELFANALYSIS_DB.GP_GPM_LOW.V_GPM_PURCH_REQ_NO_ORDER
+    

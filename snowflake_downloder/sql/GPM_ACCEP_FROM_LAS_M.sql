@@ -1,0 +1,6 @@
+﻿-- 前月以降実績
+SELECT  
+    * 
+FROM  
+    SELFANALYSIS_DB.GP_GPM_LOW.V_GPM_ACCEP_FROM_LAS_M
+    

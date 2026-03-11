@@ -1,0 +1,6 @@
+﻿-- 発注済未検収
+SELECT  
+    * 
+FROM  
+    SELFANALYSIS_DB.GP_GPM_LOW.V_GPM_PO_BEFORE_ACCEPT
+    

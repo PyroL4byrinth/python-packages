@@ -1,0 +1,6 @@
+﻿-- 購入実績
+SELECT  
+    * 
+FROM  
+    SELFANALYSIS_DB.GP_GPM_LOW.V_GPM_PURSHASE_RESULTS
+    

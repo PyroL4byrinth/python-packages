@@ -1,0 +1,6 @@
+﻿-- 品目マスタ
+SELECT  
+    * 
+FROM  
+    SELFANALYSIS_DB.GP_GPM_LOW.V_GPM_AGREED_GOODS
+    

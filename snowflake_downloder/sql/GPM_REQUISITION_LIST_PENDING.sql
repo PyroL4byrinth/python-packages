@@ -1,0 +1,6 @@
+﻿-- 購入依頼未承認
+SELECT  
+    * 
+FROM  
+    SELFANALYSIS_DB.GP_GPM_LOW.V_GPM_REQUISION_LIST_PENDING
+    

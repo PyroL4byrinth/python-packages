@@ -1,4 +1,5 @@
-﻿SELECT  
+﻿-- メーカマスタ
+SELECT  
     * 
 FROM  
     SELFANALYSIS_DB.GP_GPM_LOW.V_GPM_MAK_MST

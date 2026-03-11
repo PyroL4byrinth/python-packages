@@ -1,0 +1,6 @@
+﻿-- 発注実績（累計）
+SELECT  
+    * 
+FROM  
+    SELFANALYSIS_DB.GP_GPM_LOW.V_GPM_PO_LAST_MONTH
+    
