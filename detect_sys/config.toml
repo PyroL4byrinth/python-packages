@@ -20,7 +20,7 @@ output_dir = "\\\\10.18.4.40\\Users\\LEPass\\Desktop\\共有フォルダ\\予兆
 state_path = "state.json"
 
 [logic]
-debounce_n       = 1          # チャタ対策。1 でOFF、3以上でON
+debounce_n       = 4          # チャタ対策。1 でOFF、3以上でON
 duration_min_ms  = 0
 duration_max_ms  = 0
 

@@ -5,14 +5,15 @@ fl_path = '//10.18.4.40/Users/LEPass/Desktop/共有フォルダ/予兆検知/det
 files = sorted(os.listdir(fl_path))
 
 def prepQuantile(df, upper_th, lower_th):
-    df = df.copy()
-    df['time_d'] = pd.to_datetime(df['time']).dt.floor('D')
+    pre_df = df.copy()
+    pre_df['time_d'] = pd.to_datetime(pre_df['time'])
+    pre_df['time_d'] = pd.to_datetime(pre_df['time']).dt.floor('D')
 
-    q_upper = df.groupby('time_d')['value'].transform(lambda s: s.quantile(upper_th))
-    q_lower = df.groupby('time_d')['value'].transform(lambda s: s.quantile(lower_th))
+    q_upper = pre_df.groupby('time_d')['value'].transform(lambda s: s.quantile(upper_th))
+    q_lower = pre_df.groupby('time_d')['value'].transform(lambda s: s.quantile(lower_th))
 
-    mask = (df['value'] < q_upper) & (df['value'] > q_lower)
-    return df.loc[mask].drop(columns=['time_d'])
+    mask = (pre_df['value'] < q_upper) & (pre_df['value'] > q_lower)
+    return pre_df.loc[mask].drop(columns=['time_d'])
 
 for f_name in files:
 
@@ -23,4 +24,6 @@ for f_name in files:
         df = pd.read_csv(f_paht, encoding='cp932', sep=',') 
         df = df.rename(columns={'X_TIME':'time', 'DURATION_MS':'value'})
         df = prepQuantile(df[['time', 'value']] ,0.99, 0.01)
-        print(df)
+
+        df.to_csv('./output/pre' + f_name, index=False , encoding='cp932')
+        
