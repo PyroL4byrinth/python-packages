@@ -1,6 +1,0 @@
-﻿-- 値セットリスト
-SELECT  
-    * 
-FROM  
-    SELFANALYSIS_DB.GP_GPM_LOW.V_GPM_VALUE_SET_LIST
-    
