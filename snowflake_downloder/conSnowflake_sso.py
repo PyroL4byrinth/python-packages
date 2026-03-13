@@ -39,7 +39,7 @@ logger = logging.getLogger(__name__)
 #TOMLファイルから接続情報を読み込む
 try:
     # 本番用
-    config = toml.load('old/sample_connections_sso.toml')
+    config = toml.load('connections.toml')
     
     sf = config['snowflake']
 except FileNotFoundError:
