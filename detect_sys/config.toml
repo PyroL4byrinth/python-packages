@@ -7,7 +7,7 @@ header_row = 2            # CSVの3行目がヘッダなら 2
 [paths]
 # ★基準フォルダ（ここ以下を全探索）
 # base_dir = "\\\\192.168.89.21\\mailib\\EXV_ASSY_D_Tyubukumitsukeki_M\\INPUT_M\\bak"
-base_dir = "data"
+base_dir = "\\\\10.18.4.40\\Users\\LEPass\\Desktop\\共有フォルダ\\予兆検知\\detect_sys\\data"
 
 # CSVは再帰で全て拾う
 glob_csv   = "*.csv"
@@ -16,11 +16,12 @@ glob_csv   = "*.csv"
 prev_path  = "table/d_tube_assembly.csv"
 cross_xlsx = "table/d_tube_assembly.xlsx"
 out_events = "output/output.csv"      # state（未ペアXのみ）
-output_dir = "\\\\10.18.4.40\\Users\\LEPass\\Desktop\\共有フォルダ\\予兆検知\\detect_sys\\output"
+# output_dir = "\\\\10.18.4.40\\Users\\LEPass\\Desktop\\共有フォルダ\\予兆検知\\detect_sys\\output"
+output_dir = "output"
 state_path = "state.json"
 
 [logic]
-debounce_n       = 4          # チャタ対策。1 でOFF、3以上でON
+debounce_n       = 1          # チャタ対策。1 でOFF、3以上でON
 duration_min_ms  = 0
 duration_max_ms  = 0
 
